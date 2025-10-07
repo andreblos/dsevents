@@ -2,8 +2,12 @@ package com.inflowia.dsevents.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 @Entity
-@Table(name = "tb_paricipant")
+@Table(name = "tb_participant")
 public class Participant {
 
     @Id
@@ -13,6 +17,9 @@ public class Participant {
 
     @Column(unique = true)
     private String email;
+
+    @ManyToMany(mappedBy = "participants")
+    private Set<Activity> activities = new HashSet<>();
 
     public Participant(){}
 
@@ -44,5 +51,22 @@ public class Participant {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Participant that = (Participant) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }
